@@ -6,9 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ==============================
 # Page Settings
-# ==============================
 
 st.set_page_config(
     page_title="Ecommerce Analytics",
@@ -16,9 +14,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# ==============================
 # MySQL Connection
-# ==============================
 
 connection = mysql.connector.connect(
     host="localhost",
@@ -27,9 +23,7 @@ connection = mysql.connector.connect(
     database="ecommerce_db"
 )
 
-# ==============================
 # SQL Query
-# ==============================
 
 query = """
 SELECT
@@ -48,9 +42,7 @@ JOIN products p
 WHERE o.status = 'Completed';
 """
 
-# ==============================
 # Load Data
-# ==============================
 
 df = pd.read_sql(query, connection)
 
@@ -63,16 +55,12 @@ df["sales_amount"] = pd.to_numeric(df["sales_amount"], errors="coerce")
 
 df["order_date"] = pd.to_datetime(df["order_date"])
 
-# ==============================
 # Title
-# ==============================
 
 st.title("🛒 Ecommerce Sales Analytics")
 st.write("Ecommerce Sales Dashboard using Python + MySQL")
 
-# ==============================
 # Sidebar Filter
-# ==============================
 
 st.sidebar.header("Filters")
 
@@ -86,9 +74,8 @@ if selected_category == "All":
 else:
     filtered_df = df[df["category"] == selected_category].copy()
 
-# ==============================
+
 # KPI Cards
-# ==============================
 
 total_sales = filtered_df["sales_amount"].sum()
 total_orders = filtered_df["order_id"].nunique()
@@ -116,10 +103,8 @@ col4.metric(
     "Average Sales",
     f"₹{average_sales:,.0f}"
 )
-
-# ==============================
 # Charts - 2 Columns
-# ==============================
+
 
 col1, col2 = st.columns(2)
 
