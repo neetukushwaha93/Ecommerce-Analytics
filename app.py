@@ -136,9 +136,9 @@ with col2:
 
     st.bar_chart(product_sales)
 
-# ==============================
+
 # Monthly Sales
-# ==============================
+
 
 st.subheader("Monthly Sales")
 
@@ -153,9 +153,7 @@ monthly_sales.index = monthly_sales.index.astype(str)
 
 st.line_chart(monthly_sales)
 
-# ==============================
 # Sales Data
-# ==============================
 
 st.subheader("Sales Data")
 
@@ -164,9 +162,7 @@ st.dataframe(
     use_container_width=True
 )
 
-# ==============================
 # Download CSV
-# ==============================
 
 csv_data = filtered_df.to_csv(index=False)
 
