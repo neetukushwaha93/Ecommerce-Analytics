@@ -2,9 +2,7 @@ import mysql.connector
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# ==============================
 # MySQL Connection
-# ==============================
 
 connection = mysql.connector.connect(
     host="localhost",
@@ -13,9 +11,7 @@ connection = mysql.connector.connect(
     database="ecommerce_db"
 )
 
-# ==============================
 # SQL Query
-# ==============================
 
 query = """
 SELECT
@@ -33,9 +29,7 @@ JOIN products p
 WHERE o.status = 'Completed';
 """
 
-# ==============================
 # Load Data
-# ==============================
 
 cursor = connection.cursor()
 cursor.execute(query)
@@ -59,9 +53,7 @@ connection.close()
 print("\nData loaded successfully!")
 print(df.head())
 
-# ==============================
 # Convert Numeric Columns
-# ==============================
 
 df["quantity"] = pd.to_numeric(
     df["quantity"], errors="coerce"
@@ -81,9 +73,7 @@ df = df.dropna(subset=["sales_amount"])
 print("\nData Types:")
 print(df.dtypes)
 
-# ==============================
 # 1. Category Sales Chart
-# ==============================
 
 category_sales = (
     df.groupby("category", as_index=True)["sales_amount"]
@@ -110,9 +100,7 @@ plt.xticks(rotation=30)
 plt.tight_layout()
 plt.show()
 
-# ==============================
 # 2. Top 5 Product Sales
-# ==============================
 
 product_sales = (
     df.groupby("product_name", as_index=True)["sales_amount"]
