@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 connection = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="root",
+    password="your_password",
     database="ecommerce_db"
 )
 
