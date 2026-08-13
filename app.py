@@ -7,7 +7,7 @@ import psycopg2
 
 st.set_page_config(
     page_title="Ecommerce Analytics",
-    page_icon="🛒",
+    page_icon="",
     layout="wide"
 )
 
