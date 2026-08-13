@@ -61,7 +61,7 @@ df["order_date"] = pd.to_datetime(df["order_date"])
 
 # Title
 
-st.title("🛒 Ecommerce Sales Analytics")
+st.title("Ecommerce Sales Analytics")
 st.write("Ecommerce Sales Dashboard using Python + PostgreSQL")
 
 
