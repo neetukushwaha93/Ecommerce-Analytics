@@ -1,10 +1,7 @@
 import streamlit as st
 import pandas as pd
-import mysql.connector
-import os
-from dotenv import load_dotenv
+import psycopg2
 
-load_dotenv()
 
 # Page Settings
 
@@ -14,14 +11,17 @@ st.set_page_config(
     layout="wide"
 )
 
-# MySQL Connection
 
-connection = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root",
-    database="ecommerce_db"
+# Supabase PostgreSQL Connection
+
+connection = psycopg2.connect(
+    host=st.secrets["database"]["host"],
+    port=st.secrets["database"]["port"],
+    database=st.secrets["database"]["database"],
+    user=st.secrets["database"]["user"],
+    password=st.secrets["database"]["password"]
 )
+
 
 # SQL Query
 
@@ -42,23 +42,28 @@ JOIN products p
 WHERE o.status = 'Completed';
 """
 
+
 # Load Data
 
 df = pd.read_sql(query, connection)
 
 connection.close()
 
+
 # Convert numeric columns
+
 df["quantity"] = pd.to_numeric(df["quantity"], errors="coerce")
 df["price"] = pd.to_numeric(df["price"], errors="coerce")
 df["sales_amount"] = pd.to_numeric(df["sales_amount"], errors="coerce")
 
 df["order_date"] = pd.to_datetime(df["order_date"])
 
+
 # Title
 
 st.title("🛒 Ecommerce Sales Analytics")
-st.write("Ecommerce Sales Dashboard using Python + MySQL")
+st.write("Ecommerce Sales Dashboard using Python + PostgreSQL")
+
 
 # Sidebar Filter
 
@@ -66,7 +71,7 @@ st.sidebar.header("Filters")
 
 selected_category = st.sidebar.selectbox(
     "Select Category",
-    ["All"] + sorted(df["category"].unique().tolist())
+    ["All"] + sorted(df["category"].dropna().unique().tolist())
 )
 
 if selected_category == "All":
@@ -103,12 +108,15 @@ col4.metric(
     "Average Sales",
     f"₹{average_sales:,.0f}"
 )
-# Charts - 2 Columns
 
+
+# Charts
 
 col1, col2 = st.columns(2)
 
+
 # Category Sales
+
 with col1:
 
     st.subheader("Sales by Category")
@@ -123,6 +131,7 @@ with col1:
 
 
 # Top 5 Products
+
 with col2:
 
     st.subheader("Top 5 Products")
@@ -139,7 +148,6 @@ with col2:
 
 # Monthly Sales
 
-
 st.subheader("Monthly Sales")
 
 monthly_sales = (
@@ -153,6 +161,7 @@ monthly_sales.index = monthly_sales.index.astype(str)
 
 st.line_chart(monthly_sales)
 
+
 # Sales Data
 
 st.subheader("Sales Data")
@@ -161,6 +170,7 @@ st.dataframe(
     filtered_df,
     use_container_width=True
 )
+
 
 # Download CSV
 
